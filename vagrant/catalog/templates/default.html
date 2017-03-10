@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{%block title%}{%end block%} - Sports Venue Application</title>
+
+    <!-- Font family -->
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
+
+    <!-- Material design lite -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/material-design-lite/material.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/material-design-lite/material.min.js')}}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+  </head>
+  <body>
+    <!-- Always shows a header, even in smaller screens. -->
+ <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+   <header class="mdl-layout__header">
+     <div class="mdl-layout__header-row">
+       <!-- Title -->
+       <span class="mdl-layout-title mdl-layout--large-screen-only">Favorite Sports Venue Application</span>
+       <!-- Add spacer, to align navigation to the right -->
+       <div class="mdl-layout-spacer"></div>
+       <!-- Navigation. We hide it in small screens. -->
+       <nav class="mdl-navigation mdl-layout--large-screen-only">
+         {% for sport in sports %}
+         <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
+         {%end for%}
+         {% if user%}
+         <form action="{{url_for('show_logout')}}">
+           <!-- Raised button with ripple -->
+           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Logout</button>
+         </form>
+         {% else %}
+         <form action="{{url_for('show_login')}}">
+           <!-- Raised button with ripple -->
+           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Login</button>
+         </form>
+         {% endif%}
+       </nav>
+     </div>
+   </header>
+   <div class="mdl-layout__drawer">
+     <span class="mdl-layout-title">Venues</span>
+     <nav class="mdl-navigation">
+       {% for sport in sports %}
+       <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
+       {%end for%}
+     </nav><span class="mdl-layout-title">User Accounts</span>
+     <nav class="mdl-navigation">
+       {% if user%}
+          <a class="mdl-navigation__link" href="{{url_for('show_logout')}}">Logout</a>
+       {% else %}
+          <a class="mdl-navigation__link" href="{{url_for('show_login')}}">Login</a>
+       {% endif%}
+     </nav>
+   </div>
+   <main class="mdl-layout__content">
+     <div class="page-content">
+       <!-- Your content goes here -->
+       {% with messages = get_flashed_messages() %}
+         {% if messages %}
+         <ul class=flashes>
+           {% for message in messages %}
+           <li>{{ message }}</li>
+           {% endfor %}
+         </ul>
+        {% endif %}
+      {% endwith %}
+      {% block content %}
+      {% endblock content%}
+     </div>
+   </main>
+ </div>
+  </body>
+</html>
