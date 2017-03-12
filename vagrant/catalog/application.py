@@ -22,12 +22,14 @@ session = DBSession()
 def show_venues():
     """Shows all the favorite venues in database
     """
-    venues = session.query(Arenas).all
-    items = session.query().order_by(desc())
-    session.close()
-    return render_template('')
+    # venues = session.query(Arenas).all
+    # items = session.query().order_by(desc())
+    # session.close()
+    return render_template('default.html')
 
-@app.route('')
+@app.route('/login')
+def show_login():
+    return render_template('login.html')
 
 
 if __name__ = '__main__':
