@@ -4,14 +4,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{%block title%}{%end block%} - Sports Venue Application</title>
+    <title>Sports Venue Application</title>
 
     <!-- Font family -->
     <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet">
 
     <!-- Material design lite -->
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/material-design-lite/material.min.css')}}">
-    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='node_modules/material-design-lite/material.min.js')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='material-design-lite/material.min.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='material-design-lite/material.min.js')}}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <!-- CSS -->
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
@@ -28,8 +28,8 @@
        <!-- Navigation. We hide it in small screens. -->
        <nav class="mdl-navigation mdl-layout--large-screen-only">
          {% for sport in sports %}
-         <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
-         {%end for%}
+            <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
+         {% endfor %}
          {% if user%}
          <form action="{{url_for('show_logout')}}">
            <!-- Raised button with ripple -->
@@ -40,7 +40,7 @@
            <!-- Raised button with ripple -->
            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Login</button>
          </form>
-         {% endif%}
+         {% endif %}
        </nav>
      </div>
    </header>
@@ -49,7 +49,7 @@
      <nav class="mdl-navigation">
        {% for sport in sports %}
        <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
-       {%end for%}
+       {% endfor %}
      </nav><span class="mdl-layout-title">User Accounts</span>
      <nav class="mdl-navigation">
        {% if user%}
@@ -60,7 +60,7 @@
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-navigation__link" href="{{url_for('show_login')}}">
             Login
           </a>
-       {% endif%}
+       {% endif %}
      </nav>
    </div>
    <main class="mdl-layout__content">

@@ -5,11 +5,13 @@ from flask import Flask, render_template, request, redirect, jsonify, url_for
 # from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from database_setup import User, Sports, Arenas
+from database_setup import Base, User, Sports, Arenas
 
 app = Flask(__name__)
 
 # Creates Session to the sportsvenue database
+engine = create_engine('postgresql://sports:sports@localhost/sportsvenue')
+Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 

@@ -55,10 +55,10 @@ class Arenas(Base):
     image = Column(String(250))
     url = Column(String(250))
 
-    sports_id = Column(Integer, ForeignKey('sports_id'))
+    sports_id = Column(Integer, ForeignKey('sports.id'))
     sport = relationship('Sports')
 
-    users_id = Column(Integer, ForeignKey('users_id'))
+    users_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User')
 
 
@@ -76,6 +76,6 @@ class Arenas(Base):
 
 #Creates Database
 
-engine = create_engine('postgres:///sportsvenue.db')
+engine = create_engine('postgresql://sports:sports@localhost/sportsvenue')
 
 Base.metadata.create_all(engine)
