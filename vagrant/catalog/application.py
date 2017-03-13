@@ -2,10 +2,15 @@
 # This is the main part of the program to run Favorite Venue Application.
 #
 from flask import Flask, render_template, request, redirect, jsonify, url_for
-# from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Sports, Arenas
+import random, string
+# from oauth2client.client import flow_from_clientsecrets
+# from oauth2client.client import FlowExchangeError
+from flask import make_response
+import json, requests, httplib2
+
 
 app = Flask(__name__)
 
@@ -15,8 +20,12 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-#Shows all the sports venues
+#Shows the main page of the Venue Application
 @app.route('/')
+def showMainPage():
+    return redirect(url_for('show_venues'))
+
+#Shows all the sports venues
 @app.route('/venuefinder/')
 def show_venues():
     """Shows all the favorite venues in database
@@ -29,6 +38,8 @@ def show_venues():
 @app.route('/login')
 def show_login():
     return render_template('login.html')
+
+# def fbconnect()
 
 
 if __name__ == '__main__':

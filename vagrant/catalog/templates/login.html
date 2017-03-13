@@ -1,31 +1,14 @@
-{% extends default.html %}
+{% extends "default.html" %}
 
 {% block content %}
-<!-- Load the Facebook SDK -->
-<script>
-  window.fbAsyncInit = function() {
-    FB.init({
-      appId      : '796525817170465',
-      xfbml      : true,
-      version    : 'v2.8'
-    });
-    FB.AppEvents.logPageView();
-  };
 
-  (function(d, s, id){
-     var js, fjs = d.getElementsByTagName(s)[0];
-     if (d.getElementById(id)) {return;}
-     js = d.createElement(s); js.id = id;
-     js.src = "//connect.facebook.net/en_US/sdk.js";
-     fjs.parentNode.insertBefore(js, fjs);
-   }(document, 'script', 'facebook-jssdk'));
-</script>
+<!-- Login with Google -->
+<h1> Login with your Google</h1>
 
-<h1> Login into Favorite Venue Finder</h1>
-
-<div class="mdl-card" id= "facebook_card">
+<div class="mdl-card" id= "google_card">
   <div class="mdl-card__title mdl-card--expand">
-    <h3>Login into with your facebook</h3>
+    <h3>Login into with your Google</h3>
   </div>
 </div>
+
 {% endblock %}

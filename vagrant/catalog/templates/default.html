@@ -30,17 +30,17 @@
          {% for sport in sports %}
             <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
          {% endfor %}
-         {% if user%}
+         <!-- {% if user%} -->
          <form action="{{url_for('show_logout')}}">
            <!-- Raised button with ripple -->
            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Logout</button>
          </form>
-         {% else %}
+         <!-- {% else %} -->
          <form action="{{url_for('show_login')}}">
            <!-- Raised button with ripple -->
            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Login</button>
          </form>
-         {% endif %}
+         <!-- {% endif %} -->
        </nav>
      </div>
    </header>
@@ -52,15 +52,15 @@
        {% endfor %}
      </nav><span class="mdl-layout-title">User Accounts</span>
      <nav class="mdl-navigation">
-       {% if user%}
+       <!-- {% if user%} -->
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-navigation__link" href="{{url_for('show_logout')}}">
           Logout
           </a>
-       {% else %}
+       <!-- {% else %} -->
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-navigation__link" href="{{url_for('show_login')}}">
             Login
           </a>
-       {% endif %}
+       <!-- {% endif %} -->
      </nav>
    </div>
    <main class="mdl-layout__content">
