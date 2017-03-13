@@ -30,7 +30,7 @@ class Sports(Base):
 
     id = Column(Integer, primary_key = True)
     name = Column(String(200), nullable = False)
-    venues = relationship('Arenas', cascade="update, merge, delete")
+    venues = relationship('Arenas', cascade="save-update, merge, delete")
 
     @property
     def serialize(self):
@@ -47,6 +47,7 @@ class Arenas(Base):
     """
     Defines the sports arenas table
     """
+    __tablename__ = 'arenas'
     id = Column(Integer, primary_key = True)
     name = Column(String(100), nullable = False)
     description = Column(String)
@@ -55,6 +56,9 @@ class Arenas(Base):
 
     sports_id = Column(Integer, ForeignKey('sports_id'))
     sport = relationship('Sports')
+
+    users_id = Column(Integer, ForeignKey('users_id'))
+    user = relationship('User')
 
 
     @property
