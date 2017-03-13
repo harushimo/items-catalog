@@ -2,6 +2,8 @@
 
 This script will setup the initialize the schema of the database
 """
+import os
+import sys
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -9,7 +11,6 @@ from sqlalchemy import create_engine
 
 
 Base = declarative_base()
-
 
 class User(Base):
     """
@@ -72,3 +73,9 @@ class Arenas(Base):
             'sports_id': self.sports_id,
             'description': self.description
         }
+
+#Creates Database
+
+engine = create_engine('postgres:///sportsvenue.db')
+
+Base.metadata.create_all(engine)

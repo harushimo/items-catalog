@@ -9,10 +9,6 @@ from database_setup import User, Sports, Arenas
 
 app = Flask(__name__)
 
-#Creates Database
-engine = create_engine('postgres://sportsvenue.db')
-Base.metadata.create_all(engine)
-
 # Creates Session to the sportsvenue database
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
