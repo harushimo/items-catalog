@@ -30,14 +30,24 @@ def showMainPage():
 def show_venues():
     """Shows all the favorite venues in database
     """
-    # venues = session.query(Arenas).all
-    # items = session.query().order_by(desc())
-    # session.close()
-    return render_template('default.html')
+    venues = session.query(Arenas).all
+    return render_template('default.html',venues=venues)
 
-@app.route('/login')
-def show_login():
-    return render_template('login.html')
+#Add New Venue to the Arenas Database
+@app.route('/venuefinder/new', method=['GET', 'POST'])
+def addNewVenue():
+    if request.method == 'POST':
+        newVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
+        session.add(newVenue)
+        session.commit()
+        return redirect(url_for('show_venues'))
+    else:
+        return render_template('newVenue.html')
+
+
+# @app.route('/login')
+# def show_login():
+#     return render_template('login.html')
 
 # def fbconnect()
 
