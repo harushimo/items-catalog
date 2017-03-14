@@ -11,7 +11,6 @@ import random, string
 from flask import make_response
 import json, requests, httplib2
 
-
 app = Flask(__name__)
 
 # Creates Session to the sportsvenue database
@@ -34,7 +33,7 @@ def show_venues():
     return render_template('default.html',venues=venues)
 
 #Add New Venue to the Arenas Database
-@app.route('/venuefinder/new', method=['GET', 'POST'])
+@app.route('/venuefinder/new', methods=['GET', 'POST'])
 def addNewVenue():
     if request.method == 'POST':
         newVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
@@ -44,10 +43,18 @@ def addNewVenue():
     else:
         return render_template('newVenue.html')
 
+#Edit Existing Venue Information
+# @app.route('/venuefinder/<int:arenas.id>/update')
+# def updateVenue(arenas):
 
-# @app.route('/login')
-# def show_login():
-#     return render_template('login.html')
+
+@app.route('/login')
+def show_login():
+    return render_template('login.html')
+
+@app.route('/logout')
+def show_logout():
+    return render_template('logout.html')
 
 # def fbconnect()
 
