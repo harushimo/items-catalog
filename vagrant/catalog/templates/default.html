@@ -29,9 +29,6 @@
        <div class="mdl-layout-spacer"></div>
        <!-- Navigation. We hide it in small screens. -->
        <nav class="mdl-navigation mdl-layout--large-screen-only">
-         {% for sport in sports %}
-            <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
-         {% endfor %}
          <form action="{{url_for('show_login')}}">
            <!-- Raised button with ripple -->
            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Login</button>
@@ -49,12 +46,6 @@
      </div>
    </header>
    <div class="mdl-layout__drawer">
-     <span class="mdl-layout-title">Venues</span>
-     <nav class="mdl-navigation">
-       {% for sport in sports %}
-       <a class="mdl-navigation__link" href="{{url_for('show_venues', sports_venue = sports.venues)}}"></a>
-       {% endfor %}
-     </nav>
      <span class="mdl-layout-title">User Accounts</span>
      <nav class="mdl-navigation">
        <!-- {% if user%} -->
