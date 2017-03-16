@@ -1,0 +1,11 @@
+{% extends "default.html"%}
+
+{% block content %}
+<div class="mdl-grid FVA-form mdl-shadow--6dp">
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+    <form action="{{url_for('deletevenue.html', venue_name = sports.name)}}" method="post">
+
+    </form>
+  </div>
+</div>
+{% endblock %}
