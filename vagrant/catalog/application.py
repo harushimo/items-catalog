@@ -43,9 +43,9 @@ def addNewVenue():
     else:
         return render_template('newVenue.html')
 
-#Edit Existing Venue Information
-# @app.route('/venuefinder/<int:arenas.id>/update')
-# def updateVenue(arenas):
+# Edit Existing Venue Information
+@app.route('/venuefinder/<int:arenas.id>/update', methods= ['GET', 'POST'])
+def updateVenue(arenas):
 
 
 @app.route('/login')
