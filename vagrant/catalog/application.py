@@ -46,6 +46,15 @@ def addNewVenue():
 # Edit Existing Venue Information
 @app.route('/venuefinder/<int:arenas.id>/update', methods= ['GET', 'POST'])
 def updateVenue(arenas):
+    if request.method == 'POST':
+        newVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
+        session.add(newVenue)
+        session.commit()
+        return redirect(url_for('show_venues'))
+    else:
+        return render_template('editVenue.html')
+
+
 
 
 @app.route('/login')
