@@ -15,6 +15,9 @@ import json, requests, httplib2
 
 app = Flask(__name__)
 
+#Client Secrets file
+client_id = json.loads()
+
 # Creates Session to the sportsvenue database
 engine = create_engine('postgresql://sports:sports@localhost/sportsvenue')
 Base.metadata.bind = engine
@@ -37,7 +40,8 @@ def show_venues():
 #Add New Venue to the Arenas Database
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
-    venues = session.query('Arenas').filter_by(id="arenas.id").one()
+    print "NewVenue- Method"
+    venues = session.query('Arenas').filter_by(id="arenas_id").one()
     if request.method == 'POST':
         newVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
         session.add(newVenue)
@@ -45,12 +49,13 @@ def NewVenue():
         flash("New Venue %s has been created" %(newVenue.name))
         return redirect(url_for('show_venues'))
     else:
+        user = login_session
         return render_template('newVenue.html')
 
 # Edit Existing Venue Information
-@app.route('/venuefinder/<int:arenas.id>/update', methods= ['GET', 'POST'])
+@app.route('/venuefinder/<int:arenas_id>/update', methods= ['GET', 'POST'])
 def updateVenue(arenas):
-    updatevenues = session.query('Arenas').filter_by(id="arenas.id").one()
+    updatevenues = session.query('Arenas').filter_by(id="arenas_id").one()
     if request.method == 'POST':
         if request.form == 'name':
             updatevenues.name = request.form('name')
@@ -69,9 +74,9 @@ def updateVenue(arenas):
         return render_template('editVenue.html')
 
 #Delete Venue/Arenas Information
-@app.route('/venuefinder/<int:arenas.id>/delete', methods = ['GET', 'POST'])
+@app.route('/venuefinder/<int:arenas_id>/delete', methods = ['GET', 'POST'])
 def deleteVenue(arenas):
-    venueToBeDeleted = session.query('Arenas').filter_by(id="arenas.id").one()
+    venueToBeDeleted = session.query('Arenas').filter_by(id="arenas_id").one()
     if request.method == 'POST':
         session.delete(venueToBeDeleted)
         flash("Arenas has be deleted")
