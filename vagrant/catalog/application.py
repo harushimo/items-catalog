@@ -16,7 +16,7 @@ import json, requests, httplib2
 app = Flask(__name__)
 
 #Client Secrets file
-client_id = json.loads()
+#client_id = json.loads()
 
 # Creates Session to the sportsvenue database
 engine = create_engine('postgresql://sports:sports@localhost/sportsvenue')
@@ -41,9 +41,9 @@ def show_venues():
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
     print "NewVenue- Method"
-    venues = session.query('Arenas').filter_by(id="arenas_id").one()
     if request.method == 'POST':
         newVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
+        print newVenue
         session.add(newVenue)
         session.commit()
         flash("New Venue %s has been created" %(newVenue.name))

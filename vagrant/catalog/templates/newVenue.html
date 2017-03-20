@@ -4,36 +4,40 @@
 <div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--black-100">
 	<main class = "mdl-layout__content">
 		<div class="mdl-grid">
-			<div class="mdl-cell mdl-shadow--4dp mdl-cell--2-col mdl-cell--6-col--tablet mdl-cell--4-col--phone">
+			<!-- <div class="mdl-cell mdl-shadow--4dp mdl-cell--2-col mdl-cell--6-col--tablet mdl-cell--4-col--phone"> -->
 				<div>
-					<h3>Add New Venue</h3>
+					<h4>Add New Venue</h4>
 				</div>
-			</div>
+			<!-- </div> -->
+			<br>
 			<div class="row">
+				<br>
 				<form action="#" method = "post">
 					<div class="mdl-textfield mdl-js-textfield">
 						<input class="mdl-textfield__input" type="text" id="Name" />
 						<label class="mdl-textfield__label" for="username">Name</label>
 					</div>
+					<br>
 					<div class="mdl-textfield mdl-js-textfield">
 						<input class="mdl-textfield__input" type="text" id="description" />
 						<label class="mdl-textfield__label" for="description">Description</label>
 					</div>
+					<br>
           <div class="mdl-textfield mdl-js-textfield">
 						<input class="mdl-textfield__input"  id="venue_image"/>
 						<label class="mdl-textfield__label" for="image">Image</label>
 					</div>
+					<br>
           <div class="mdl-textfield mdl-js-textfield">
 						<input class="mdl-textfield__input" type="text" id="url" />
 						<label class="mdl-textfield__label" for="url">URL</label>
 					</div>
+					<br>
 			</div>
-			<div class="">
-				<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href= "url_for(newVenue)">Add</button>
-			</div>
-			<div class="">
-				<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect">Add</button>
-			</div>
+		</div>
+		<div class="">
+			<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href= "url_for(newVenue)">Add</button>
+			<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="url_for(updateVenue)">update</button>
 		</div>
 	</main>
 
