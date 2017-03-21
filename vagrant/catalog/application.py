@@ -51,7 +51,7 @@ def show_venues():
     """Shows all the favorite venues in database
     """
     venues = session.query(Arenas).all
-    return render_template('default.html',venues=venues)
+    return render_template('venue.html',venues=venues)
 
 #Add New Venue to the Arenas Database
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
