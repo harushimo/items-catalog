@@ -7,7 +7,7 @@ from flask import make_response
 from flask import session as login_session
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
-from database_setup import Base, User, Sports, Arenas
+from database_setup import Base, User, Arenas
 from werkzeug.utils import secure_filename
 #from oauth2client.client import flow_from_clientsecrets
 #from oauth2client.client import FlowExchangeError
@@ -38,19 +38,18 @@ def showMainPage():
 #Creates JSON Endpoint
 @app.route('/venuefinder/JSON')
 def arenasJSON(arenas_id):
-    venues = session.query('Arenas').all()
-    venuesJSON = jsonify(Arenas = [Arenas.serialize \
-    for venue in venues])
-    return venuesJSON
+    arenas = session.query('Arenas').filter_by(id = "arenas_id").all()
+    serializevenues = [i.serialize for i in arenas]
+    return jsonify(serializevenues)
 
 
 
 #Shows all the sports venues
-@app.route('/venuefinder/')
+@app.route('/venuefinder/', methods=['GET', 'POST'])
 def show_venues():
     """Shows all the favorite venues in database
     """
-    venues = session.query(Arenas).all
+    venues = session.query(Arenas).order_by(asc(Arenas.name)).all
     return render_template('venue.html',venues=venues)
 
 #Add New Venue to the Arenas Database
@@ -64,10 +63,8 @@ def NewVenue():
         session.add(newVenue)
         session.commit()
         flash("New Venue %s has been created" %(newVenue.name))
-        return render_template('newVenue.html')
-        #return redirect(url_for('show_venues'))
+        return redirect(url_for('show_venues'))
     else:
-        user = login_session
         return render_template('newVenue.html')
 
 # Edit Existing Venue Information
