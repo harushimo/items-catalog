@@ -12,28 +12,28 @@
 			<br>
 			<div class="row">
 				<br>
-				<form action = "{{url_for('updateVenue', arenas_id = arenas.id)}}" method = "post">
+				<form method = "post">
 					<div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="name" />
+						<input class="mdl-textfield__input" type="text" name="name"  value = {{venue.name}}/>
 						<label class="mdl-textfield__label" for="username">Name</label>
 					</div>
 					<br>
 					<div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="description" />
+						<input class="mdl-textfield__input" type="text" name="description" value = {{venue.description}}/>
 						<label class="mdl-textfield__label" for="description">Description</label>
 					</div>
 					<br>
 					<br>
           <div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="url" />
+						<input class="mdl-textfield__input" type="text" name="url" value = {{venue.url}}/>
 						<label class="mdl-textfield__label" for="url">URL</label>
 					</div>
 					<br>
 			</div>
 		</div>
 		<div class="">
-			<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href= "url_for(newVenue)">Add</button>
-			<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="url_for(updateVenue)">update</button>
+		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = venue.id)}}">Edit</a>
+		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue',  arenas_id = venue.id)}}">Delete</a>
 		</div>
 	</main>
 

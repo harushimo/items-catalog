@@ -3,27 +3,28 @@
 {% extends "default.html" %}
 
 {% block content %}
-<div class="demo-card-wide mdl-card mdl-shadow--2dp">
-  <div class="mdl-card__title">
-    <h2 class="mdl-card__title-text">{{venues.name}}</h2>
+<!-- <div> -->
+  {% for venue in venues %}
+  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+      <h2>{{venue.name}}</h2>
+    </div>
+    <div class="mdl-card__media">
+      <img src="{{venue.url}}" alt="{{venue.url}}" />
+    </div>
+    <div class="mdl-card__supporting-text">
+    <p>
+      {{venue.description}}
+    </p>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = venue.id)}}">Edit</a>
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue',  arenas_id = venue.id)}}">Delete</a>
+    </div>
   </div>
-  <div class="mdl-card__media">
-    <img src="" alt="" />
-  </div>
-  <div class="mdl-card__supporting-text">
-  <p>
-    {{venues.description}}
-  </p>
-  </div>
-  <div class="mdl-card__actions mdl-card--border">
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = arenas_id)}}">Edit</a>
-    <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue')}}">Delete</a>
-  </div>
-  <div class="mdl-card__menu">
-    <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect">
-      <i class="material-icons">share</i>
-    </button>
-  </div>
-</div>
+{% endfor %}
+<!-- </div> -->
+
+
 
 {% endblock %}
