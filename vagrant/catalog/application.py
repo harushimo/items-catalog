@@ -108,8 +108,8 @@ def updateVenue(arenas_id):
             session.add(updatevenues)
             session.commit()
             flash("Arenas has been updated")
-            return redirect(url_for('show_venues'))
-            #return render_template('editVenue.html', venue = updatevenues)
+            #return redirect(url_for('show_venues'))
+            return render_template('editVenue.html', venue = updatevenues)
         else:
             return render_template('editVenue.html')
     else:
