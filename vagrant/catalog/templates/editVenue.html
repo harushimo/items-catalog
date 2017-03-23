@@ -14,26 +14,23 @@
 				<br>
 				<form method = "post">
 					<div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="name"  value = {{venue.name}}/>
-						<label class="mdl-textfield__label" for="username">Name</label>
+						<input class="mdl-textfield__input" type="text" placeholder="Venue Name" name="name"  value = {{venue.name}} />
 					</div>
 					<br>
 					<div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="description" value = {{venue.description}}/>
-						<label class="mdl-textfield__label" for="description">Description</label>
+						<input class="mdl-textfield__input" type="text" placeholder="description"name="description" value = {{venue.description}}/>
 					</div>
 					<br>
 					<br>
-          <div class="mdl-textfield mdl-js-textfield">
-						<input class="mdl-textfield__input" type="text" name="url" value = {{venue.url}}/>
-						<label class="mdl-textfield__label" for="url">URL</label>
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" placeholder= "URL" name="url" value = {{venue.url}}/>
 					</div>
 					<br>
 			</div>
 		</div>
 		<div class="">
-		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = venue.id)}}">Edit</a>
-		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue',  arenas_id = venue.id)}}">Delete</a>
+		<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Update</button>
+		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('show_venues')}}">Cancel</a>
 		</div>
 	</main>
 

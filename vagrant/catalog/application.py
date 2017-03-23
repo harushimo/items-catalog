@@ -31,6 +31,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+#Login validator
+
 
 #Shows the main page of the Venue Application
 @app.route('/')
@@ -47,7 +49,7 @@ def arenasJSON(arenas_id):
 
 
 #Shows all the sports venues
-@app.route('/venuefinder/')
+@app.route('/venuefinder/', methods = ['GET', 'POST'])
 def show_venues():
     """Shows all the favorite venues in database
     """
@@ -55,6 +57,15 @@ def show_venues():
     print "GET Request"
     print venues
     return render_template('venue.html',venues=venues)
+
+#show a single venue
+# @app.route('/venuefinder/<int:arenas_id>')
+# def showSingleVenue():
+#     print "showSingleVenue - method"
+#     singleVenue = session.query(Arenas).filter_by(id=arenas_id).one()
+#     return
+
+
 
 #Add New Venue to the Arenas Database
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
@@ -78,32 +89,38 @@ def updateVenue(arenas_id):
     print "updatedvenue-method"
     print arenas_id
     updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
-    print updatevenues.id, updatevenues.name
     if updatevenues:
+        print "Inside updatevenues if statement"
         if request.method == 'POST':
+            print "Inside request.method == post if statement"
             if request.form['name']:
-                flash("Updated Name successfully")
                 updatevenues.name = request.form['name']
+                print updatevenues.name
+                flash("Updated Name successfully")
             if request.form['description']:
+                updatevenues.description = request.form['description']
                 flash ("Updated description successfully")
-                updatedvenues.description = request.form['description']
+                print updatevenues.description
             if request.form['url']:
-                flash ("URL updated")
                 updatevenues.url = request.form['url']
-            # updateVenue = Arenas(name=request.form('name'), description=request.form('description'), image=request.form('venue_image'), url=request.form('url'))
+                flash ("Updated URL")
+                print updatevenues.url
             session.add(updatevenues)
             session.commit()
             flash("Arenas has been updated")
-            return render_template('editVenue.html', venue = updatevenues)
+            return redirect(url_for('show_venues'))
+            #return render_template('editVenue.html', venue = updatevenues)
         else:
-            return render_template('editVenue.html', venue = updatevenues)
+            return render_template('editVenue.html')
     else:
         print "No venue"
 
 #Delete Venue/Arenas Information
 @app.route('/venuefinder/<int:arenas_id>/delete/', methods = ['GET', 'POST'])
 def deleteVenue(arenas_id):
-    venueToBeDeleted = session.query('Arenas').filter_by(id="arenas_id").one()
+    print "deleteVenue - method"
+    print arenas_id
+    venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
     if request.method == 'POST':
         session.delete(venueToBeDeleted)
         flash("Arenas has be deleted")
@@ -219,7 +236,7 @@ def gconnect():
     flash("you are now logged in as %s" % login_session['username'])
     print "done!"
     return output
-    
+
 # User Helper Functions
 
 
