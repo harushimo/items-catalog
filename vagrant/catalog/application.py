@@ -39,13 +39,18 @@ session = DBSession()
 def showMainPage():
     return redirect(url_for('show_venues'))
 
-#Creates JSON Endpoint
+#Creates JSON Endpoint to view all venues
 @app.route('/venuefinder/JSON')
-def arenasJSON(arenas_id):
-    arenas = session.query('Arenas').filter_by(id = "arenas_id").all()
-    serializevenues = [i.serialize for i in arenas]
-    return jsonify(serializevenues)
+def arenasJSON():
+    arenas = session.query(Arenas).all()
+    return jsonify(serializevenues = [i.serialize for i in arenas])
 
+#Creates JSON Endpoint to view singleVenue
+@app.route('/venuefinder/<int:arenas_id>/JSON')
+def arenasSingleJSON(arenas_id):
+    print arenas_id
+    arenas = session.query(Arenas).filter_by(id = arenas_id).all()
+    return jsonify(serializevenues = [i.serialize for i in arenas])
 
 
 #Shows all the sports venues
@@ -108,10 +113,10 @@ def updateVenue(arenas_id):
             session.add(updatevenues)
             session.commit()
             flash("Arenas has been updated")
-            #return redirect(url_for('show_venues'))
-            return render_template('editVenue.html', venue = updatevenues)
+            return redirect(url_for('show_venues'))
+            # return render_template('editVenue.html', venue = updatevenues)
         else:
-            return render_template('editVenue.html')
+            return render_template('editVenue.html', venue = updatevenues)
     else:
         print "No venue"
 
@@ -121,11 +126,16 @@ def deleteVenue(arenas_id):
     print "deleteVenue - method"
     print arenas_id
     venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
-    if request.method == 'POST':
+    print venueToBeDeleted.id, venueToBeDeleted.name
+    if request.method == 'GET':
+        print "Inside request.method == get"
         session.delete(venueToBeDeleted)
-        flash("Arenas has be deleted")
         session.commit()
+        flash("Arenas has be deleted")
+        return render_template('deletevenue.html', venue = venueToBeDeleted)
         return redirect(url_for('show_venues'))
+    else:
+        return render_template('deletevenue.html', venue = venueToBeDeleted)
 
 #Login page
 @app.route('/login')
@@ -238,8 +248,6 @@ def gconnect():
     return output
 
 # User Helper Functions
-
-
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])

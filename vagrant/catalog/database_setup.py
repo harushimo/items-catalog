@@ -70,8 +70,8 @@ class Arenas(Base):
         return {
             'id': self.id,
             'name': self.name,
-            'sports_id': self.sports_id,
-            'description': self.description
+            'description': self.description,
+            'url': self.url
         }
 
 #Creates Database
