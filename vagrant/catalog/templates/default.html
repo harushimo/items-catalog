@@ -29,24 +29,17 @@
        <div class="mdl-layout-spacer"></div>
        <!-- Navigation. We hide it in small screens. -->
        <nav class="mdl-navigation mdl-layout--large-screen-only">
-         <form action="{{url_for('show_login')}}">
            <!-- Raised button with ripple -->
-           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Login</button>
-         </form>
-         <form action="{{url_for('NewVenue')}}">
+           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="{{url_for('show_login')}}">Login</a>
            <!-- Raised button with ripple -->
-           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">AddVenue</button>
-         </form>
-         <form action="{{url_for('show_logout')}}">
+           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="{{url_for('NewVenue')}}">AddVenue</a>
            <!-- Raised button with ripple -->
-           <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">Logout</button>
-         </form>
-
+           <a class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" href="{{url_for('show_logout')}}">Logout</a>
        </nav>
      </div>
    </header>
    <div class="mdl-layout__drawer">
-     <span class="mdl-layout-title">User Accounts</span>
+     <span class="mdl-layout-title">Menu</span>
      <nav class="mdl-navigation">
        <!-- {% if user%} -->
           <a class="mdl-button mdl-js-button mdl-button--raised mdl-navigation__link" href="{{url_for('show_logout')}}">

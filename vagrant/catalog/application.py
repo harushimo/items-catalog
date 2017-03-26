@@ -8,15 +8,11 @@ from flask import session as login_session
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, User, Arenas
-from werkzeug.utils import secure_filename
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
+from functools import wraps
 
 import json, requests, httplib2
-
-#Creating upload folder for images and allowed extensions
-#UPLOAD_FOLDER = ''
-#ALLOWED_EXTENSIONS = set(['txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'])
 
 app = Flask(__name__)
 
@@ -32,112 +28,12 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 #Login validator
+def userValidation():
+    if 'username' not in login_session:
+        #flash("Login Required")
+        return redirect('show_login')
 
-
-#Shows the main page of the Venue Application
-@app.route('/')
-def showMainPage():
-    return redirect(url_for('show_venues'))
-
-#Creates JSON Endpoint to view all venues
-@app.route('/venuefinder/JSON')
-def arenasJSON():
-    arenas = session.query(Arenas).all()
-    return jsonify(serializevenues = [i.serialize for i in arenas])
-
-#Creates JSON Endpoint to view singleVenue
-@app.route('/venuefinder/<int:arenas_id>/JSON')
-def arenasSingleJSON(arenas_id):
-    print arenas_id
-    arenas = session.query(Arenas).filter_by(id = arenas_id).all()
-    return jsonify(serializevenues = [i.serialize for i in arenas])
-
-
-#Shows all the sports venues
-@app.route('/venuefinder/', methods = ['GET', 'POST'])
-def show_venues():
-    """Shows all the favorite venues in database
-    """
-    venues = session.query(Arenas).all()
-    print "GET Request"
-    print venues
-    return render_template('venue.html',venues=venues)
-
-#show a single venue
-# @app.route('/venuefinder/<int:arenas_id>')
-# def showSingleVenue():
-#     print "showSingleVenue - method"
-#     singleVenue = session.query(Arenas).filter_by(id=arenas_id).one()
-#     return
-
-
-
-#Add New Venue to the Arenas Database
-@app.route('/venuefinder/new', methods=['GET', 'POST'])
-def NewVenue():
-    print "NewVenue- Method"
-    if request.method == 'POST':
-        print "Post Request"
-        newVenue = Arenas(name=request.form['name'], description=request.form['description'], url=request.form['url'])
-        print newVenue.name, newVenue.description, newVenue.url
-        session.add(newVenue)
-        session.commit()
-        flash("New Venue %s has been created" %(newVenue.name))
-        print newVenue.name, newVenue.description, newVenue.url, newVenue.id
-        return redirect(url_for('show_venues'))
-    else:
-        return render_template('newVenue.html')
-
-# Edit Existing Venue Information
-@app.route('/venuefinder/<int:arenas_id>/edit/', methods= ['GET', 'POST'])
-def updateVenue(arenas_id):
-    print "updatedvenue-method"
-    print arenas_id
-    updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
-    if updatevenues:
-        print "Inside updatevenues if statement"
-        if request.method == 'POST':
-            print "Inside request.method == post if statement"
-            if request.form['name']:
-                updatevenues.name = request.form['name']
-                print updatevenues.name
-                flash("Updated Name successfully")
-            if request.form['description']:
-                updatevenues.description = request.form['description']
-                flash ("Updated description successfully")
-                print updatevenues.description
-            if request.form['url']:
-                updatevenues.url = request.form['url']
-                flash ("Updated URL")
-                print updatevenues.url
-            session.add(updatevenues)
-            session.commit()
-            flash("Arenas has been updated")
-            return redirect(url_for('show_venues'))
-            # return render_template('editVenue.html', venue = updatevenues)
-        else:
-            return render_template('editVenue.html', venue = updatevenues)
-    else:
-        print "No venue"
-
-#Delete Venue/Arenas Information
-@app.route('/venuefinder/<int:arenas_id>/delete/', methods = ['GET', 'POST'])
-def deleteVenue(arenas_id):
-    print "deleteVenue - method"
-    print arenas_id
-    venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
-    print venueToBeDeleted.id, venueToBeDeleted.name
-    if request.method == 'GET':
-        print "Inside request.method == get"
-        session.delete(venueToBeDeleted)
-        session.commit()
-        flash("Arenas has be deleted")
-        return render_template('deletevenue.html', venue = venueToBeDeleted)
-        return redirect(url_for('show_venues'))
-    else:
-        return render_template('deletevenue.html', venue = venueToBeDeleted)
-
-#Login page
+#Login page - cross site forgery
 @app.route('/login')
 def show_login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -303,11 +199,96 @@ def gdisconnect():
         return response
 
 
+#General Disconnect method
 @app.route('/logout')
 def show_logout():
-    return render_template('logout.html')
+    if login_session['provider'] == 'google':
+        gdisconnect()
+        return redirect(url_for('show_venues'))
 
-# def fbconnect()
+#Shows the main page of the Venue Application
+@app.route('/')
+def showMainPage():
+    return redirect(url_for('show_venues'))
+
+#Creates JSON Endpoint to view all venues
+@app.route('/venuefinder/JSON')
+def arenasJSON():
+    arenas = session.query(Arenas).all()
+    return jsonify(serializevenues = [i.serialize for i in arenas])
+
+#Creates JSON Endpoint to view singleVenue
+@app.route('/venuefinder/<int:arenas_id>/JSON')
+def arenasSingleJSON(arenas_id):
+    print arenas_id
+    arenas = session.query(Arenas).filter_by(id = arenas_id).all()
+    return jsonify(serializevenues = [i.serialize for i in arenas])
+
+
+#Shows all the sports venues
+@app.route('/venuefinder/', methods = ['GET', 'POST'])
+def show_venues():
+    """Shows all the favorite venues in database
+    """
+    venues = session.query(Arenas).all()
+    print "GET Request"
+    print venues
+    return render_template('venue.html',venues=venues)
+
+@app.route('/venuefinder/test', methods = ['GET', 'POST'])
+def testPage():
+    return render_template('test.html')
+
+#Add New Venue to the Arenas Database
+@app.route('/venuefinder/new', methods=['GET', 'POST'])
+def NewVenue():
+    userValidation()
+    if request.method == 'POST':
+        newVenue = Arenas(name=request.form['name'], description=request.form['description'], url=request.form['url'])
+        print newVenue.name, newVenue.description, newVenue.url
+        session.add(newVenue)
+        session.commit()
+        flash("New Venue %s has been created" %(newVenue.name))
+        print newVenue.name, newVenue.description, newVenue.url, newVenue.id
+        return redirect(url_for('show_venues'))
+    else:
+        return render_template('newVenue.html')
+
+# Edit Existing Venue Information
+@app.route('/venuefinder/<int:arenas_id>/edit/', methods= ['GET', 'POST'])
+def updateVenue(arenas_id):
+    updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
+    if updatevenues:
+        if request.method == 'POST':
+            print "Inside request.method == post if statement"
+            if request.form['name']:
+                updatevenues.name = request.form['name']
+            if request.form['description']:
+                updatevenues.description = request.form['description']
+            if request.form['url']:
+                updatevenues.url = request.form['url']
+            session.add(updatevenues)
+            session.commit()
+            flash("Arenas has been updated")
+            return redirect(url_for('show_venues'))
+        else:
+            return render_template('editVenue.html', venue = updatevenues)
+    else:
+        print "No venue"
+
+#Delete Venue/Arenas Information
+@app.route('/venuefinder/<int:arenas_id>/delete/', methods = ['GET', 'POST'])
+def deleteVenue(arenas_id):
+    venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
+    print venueToBeDeleted.id, venueToBeDeleted.name
+    if request.method == 'POST':
+        print "Inside request.method == POST"
+        session.delete(venueToBeDeleted)
+        session.commit()
+        flash("Arenas has be deleted")
+        return redirect(url_for('show_venues', venue = venueToBeDeleted))
+    else:
+        return render_template('deletevenue.html', venue = venueToBeDeleted)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
