@@ -60,12 +60,12 @@ This will run an local instance of the application.  Type in the browser: 'https
 
 
 Main Screen:
-![Main Screen](../static/images/Main_page.png "Main Page")
+![Main Screen](/vagrant/catalog/static/images/Main_page.png "Main Page")
 
 click the login button.
 
 Once Login, a new screen will show up with AddVenue and Logout
 
-![User Screen](../static/images/authenicated_user.png "User Menu")
+![User Screen](/vagrant/catalog/static/images/authenicated_user.png "User Menu")
 
 ### Adding a venue
