@@ -1,0 +1,30 @@
+/*HTML elements*/
+
+body {
+   font-family: 'Droid Sans', sans-serif;
+}
+
+/*Material Design Lite Elements*/
+mdl-layout {
+	align-items: center;
+  justify-content: center;
+}
+.mdl-layout__content {
+	padding: 24px;
+	flex: none;
+}
+
+.mdl-card__media {
+  background-color: transparent;
+}
+
+.demo-card-wide.mdl-card {
+  width: 512px;
+}
+.demo-card-wide > .mdl-card__title {
+  color: #292a4c;
+  height: 176px;
+}
+.demo-card-wide > .mdl-card__menu {
+  color: #fff;
+}

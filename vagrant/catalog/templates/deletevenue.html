@@ -1,0 +1,21 @@
+{% extends "default.html"%}
+
+{% block content %}
+<div class="demo-card-wide mdl-card FVA-form mdl-shadow--6dp">
+  <div class="mdl-cell mdl-cell--12-col mdl-cell--8-col-tablet mdl-cell--4-col-phone">
+    <div>
+      <h4>Are you sure that you want to delete venue:</h4>
+    </div>
+    <form method="post">
+      <div class="mdl-textfield mdl-js-textfield">
+        <input class="mdl-textfield__input" type="text" placeholder="Venue Name" name="name"  value = {{venue.name}} />
+      </div>
+      <div class="">
+      <button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Delete</button>
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('show_venues')}}">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+{% extends "default.html" %}
+
+{% block content %}
+<div class="mdl-layout mdl-layout--fixed-header mdl-js-layout mdl-color--black-100">
+	<main class = "mdl-layout__content">
+		<!-- <div class="mdl-grid"> -->
+			<!-- <div class="mdl-cell mdl-shadow--4dp mdl-cell--2-col mdl-cell--6-col--tablet mdl-cell--4-col--phone"> -->
+				<!-- <div> -->
+					<h4>Update Venue</h4>
+				<!-- </div> -->
+			<!-- </div> -->
+			<br>
+			<div class="row">
+				<br>
+				<form method = "post">
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" placeholder="Venue Name" name="name"  value = {{venue.name}} />
+					</div>
+					<br>
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" placeholder="description"name="description" value = {{venue.description}}/>
+					</div>
+					<br>
+					<br>
+					<div class="mdl-textfield mdl-js-textfield">
+						<input class="mdl-textfield__input" type="text" placeholder= "Image URL" name="url" value = {{venue.url}}/>
+					</div>
+					<br>
+			</div>
+		</div>
+		<div class="">
+		<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Update</button>
+		<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('show_venues')}}">Cancel</a>
+		</div>
+	</main>
+
+<!-- </div> -->
+{% endblock %}

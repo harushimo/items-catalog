@@ -1,0 +1,30 @@
+<!-- This is to show a single card -->
+
+{% extends "default.html" %}
+
+{% block content %}
+<!-- <div> -->
+  {% for venue in venues %}
+  <div class="demo-card-wide mdl-card mdl-shadow--2dp">
+    <div class="mdl-card__title">
+      <h2>{{venue.name}}</h2>
+    </div>
+    <div class="mdl-card__media">
+      <img src="{{venue.url}}" alt="{{venue.url}}" />
+    </div>
+    <div class="mdl-card__supporting-text">
+    <p>
+      {{venue.description}}
+    </p>
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = venue.id)}}">Edit</a>
+      <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue',  arenas_id = venue.id)}}">Delete</a>
+    </div>
+  </div>
+{% endfor %}
+<!-- </div> -->
+
+
+
+{% endblock %}
