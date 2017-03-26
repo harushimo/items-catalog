@@ -1,16 +1,16 @@
-#Items Catalog Project
+# Items Catalog Project
 
 This project was developed using Flask. Flask is a light weight web framework written in python.   The code also utilizes [material design lite](https://getmdl.io).   
 
 
-##Current Features
+## Current Features
 
 1. CRUD  
 2. Oauth2 - Google Authentication
 3. Cross site
 4. Image Handling using raw url
 
-##Environment
+## Environment
 
 The environment leverages a Vagrant VM.   There is a shell script written by Udacity called pg_config.sh.  I have modified the original script to create the sportsvenue database.  You can still access the original script via pg_config.sh.bak (bak - stands for backup script)
 
@@ -19,7 +19,7 @@ If the script does not function properly, do the following command:
 
 This will restore the original script.
 
-###How to setup the Environment
+### How to setup the Environment
 
 1. Clone the github repo:
 `git clone https://github.com/harushimo/fullstack-nanodegree-vm.git`
@@ -36,7 +36,7 @@ The data is store in postgresql database.
 
 There is a shared folder called vagrant inside the virtual machine.  You must type this command while in the VM: `cd /vagrant`
 
-### setup database manually(if script fails)
+### Setup database manually(if script fails)
 
 ```
 sudo su - postgres
@@ -52,6 +52,7 @@ For the create user, you can input any password you like.
 
 ##Running the application
 When inside the virtual machine, run the following commands
+
 ```
 cd fullstack/vagrant/catalog
 python application.py
@@ -68,4 +69,15 @@ Once Login, a new screen will show up with AddVenue and Logout
 
 ![User Screen](/vagrant/catalog/static/images/authenicated_user.png "User Menu")
 
-### Adding a venue
+### Adding and Editing a venue
+![Add New Venue](/vagrant/catalog/static/images/add_new_venue.png "New Venue")
+
+To Add/Edit a new venue
+1. Type the venue name and description
+2. Enter the raw image url
+- Google your favorite venue image, click the option view image.  It will take you image url link. Copy that url and paste into the form. The image will render. Here is a sample page
+![Raw image](/vagrant/catalog/static/images/view_image.png "Image Finder")
+
+### Delete Venue
+Click on the Delete button. It will take you the delete page:
+![Delete Venue](/vagrant/catalog/static/images/delete_venue.png "Delete Venue")
