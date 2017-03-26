@@ -274,12 +274,11 @@ def NewVenue():
 def updateVenue(arenas_id):
     if 'username' not in login_session:
         return redirect(url_for('show_login'))
-
     updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
-    print updatevenues.name
-    # if updatevenues.id != login_session['user_id']:
-    #     flash('You need to login for editing')
-    #     return redirect(url_for('show_login'))
+
+    if updatevenues.id != login_session['user_id']:
+        flash('You need to login for editing')
+        return redirect(url_for('show_login'))
 
 
     if request.method == 'POST':
@@ -302,13 +301,15 @@ def updateVenue(arenas_id):
 # Delete Venue/Arenas Information
 @app.route('/venuefinder/<int:arenas_id>/delete/', methods=['GET', 'POST'])
 def deleteVenue(arenas_id):
-
-    if 'username' not in login_session:
-        return redirect(url_for('show_login'))
-    # if venueToBeDeleted.id != login_session['user_id']:
-    #     flash('You need to login for deleting')
-    #     return redirect(url_for('show_login'))
     venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
+    # if 'username' not in login_session:
+    #     return redirect(url_for('show_login'))
+    print venueToBeDeleted.id
+    print login_session['user_id']
+    if venueToBeDeleted.id != login_session['user_id']:
+        flash('You need to login for deleting')
+        return redirect(url_for('show_login'))
+
     if request.method == 'POST':
         print "Inside request.method == POST"
         session.delete(venueToBeDeleted)
