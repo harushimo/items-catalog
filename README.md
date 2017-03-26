@@ -50,7 +50,7 @@ exit
 
 For the create user, you can input any password you like.
 
-##Running the application
+### Running the application
 When inside the virtual machine, run the following commands
 
 ```
