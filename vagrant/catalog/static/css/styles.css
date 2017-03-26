@@ -20,7 +20,6 @@ mdl-layout {
 .demo-card-wide > .mdl-card__title {
   color: #292a4c;
   height: 176px;
-  background: url('../assets/demos/welcome_card.jpg') center / cover;
 }
 .demo-card-wide > .mdl-card__menu {
   color: #fff;

@@ -28,10 +28,9 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 #Login validator
-def userValidation():
-    if 'username' not in login_session:
-        #flash("Login Required")
-        return redirect('show_login')
+# def userValidation():
+#     if 'username' not in login_session:
+#         return redirect('show_login')
 
 #Login page - cross site forgery
 @app.route('/login')
@@ -235,14 +234,11 @@ def show_venues():
     print venues
     return render_template('venue.html',venues=venues)
 
-@app.route('/venuefinder/test', methods = ['GET', 'POST'])
-def testPage():
-    return render_template('test.html')
-
 #Add New Venue to the Arenas Database
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
-    userValidation()
+    if 'username' not in login_session:
+        return redirect(url_for('show_login'))
     if request.method == 'POST':
         newVenue = Arenas(name=request.form['name'], description=request.form['description'], url=request.form['url'])
         print newVenue.name, newVenue.description, newVenue.url
@@ -257,6 +253,8 @@ def NewVenue():
 # Edit Existing Venue Information
 @app.route('/venuefinder/<int:arenas_id>/edit/', methods= ['GET', 'POST'])
 def updateVenue(arenas_id):
+    if 'username' not in login_session:
+        return redirect(url_for('show_login'))
     updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
     if updatevenues:
         if request.method == 'POST':
@@ -279,6 +277,8 @@ def updateVenue(arenas_id):
 #Delete Venue/Arenas Information
 @app.route('/venuefinder/<int:arenas_id>/delete/', methods = ['GET', 'POST'])
 def deleteVenue(arenas_id):
+    if 'username' not in login_session:
+        return redirect(url_for('show_login'))
     venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
     print venueToBeDeleted.id, venueToBeDeleted.name
     if request.method == 'POST':
