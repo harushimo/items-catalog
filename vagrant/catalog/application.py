@@ -27,10 +27,6 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
-#Login validator
-# def userValidation():
-#     if 'username' not in login_session:
-#         return redirect('show_login')
 
 #Login page - cross site forgery
 @app.route('/login')
@@ -237,6 +233,8 @@ def show_venues():
 #Add New Venue to the Arenas Database
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
+    """Creates a ne
+    """
     if 'username' not in login_session:
         return redirect(url_for('show_login'))
     if request.method == 'POST':

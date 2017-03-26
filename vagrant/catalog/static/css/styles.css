@@ -14,6 +14,10 @@ mdl-layout {
 	flex: none;
 }
 
+.mdl-card__media {
+  background-color: transparent;
+}
+
 .demo-card-wide.mdl-card {
   width: 512px;
 }
