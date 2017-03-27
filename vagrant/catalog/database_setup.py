@@ -34,10 +34,7 @@ class Arenas(Base):
     image = Column(String(250))
     url = Column(String(250))
 
-    # sports_id = Column(Integer, ForeignKey('sports.id'))
-    # sport = relationship('Sports')
-
-    users_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User')
 
 

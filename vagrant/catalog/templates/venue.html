@@ -18,8 +18,10 @@
     </p>
     </div>
     <div class="mdl-card__actions mdl-card--border">
+      {%if 'username' in session %}
       <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('updateVenue', arenas_id = venue.id)}}">Edit</a>
       <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('deleteVenue',  arenas_id = venue.id)}}">Delete</a>
+      {% endif %}
     </div>
   </div>
 {% endfor %}

@@ -21,13 +21,14 @@
 						<input class="mdl-textfield__input" type="text" placeholder= "Image URL" name="url" value = {{venue.url}}/>
 					</div>
 					<br>
+					<div>
+						<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Update</button>
+						<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('show_venues')}}">Cancel</a>
+					</div>
 				</form>
 			</div>
 		</div>
-		<div class="">
-			<button class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" type="submit">Update</button>
-			<a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{url_for('show_venues')}}">Cancel</a>
-		</div>
+
 	</main>
 
 

@@ -34,6 +34,18 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if 'username' in login_session:
+#             print 'Decorator ',login_session['user_id']
+#             return f(*args, **kwargs)
+#         else:
+#             print 'else'
+#             flash("You are not allowed to access there")
+#             return redirect(url_for('show_venues'))
+#     return decorated_function
+
 
 # Login page - cross site forgery
 @app.route('/login')
@@ -193,6 +205,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['user_id']
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
@@ -225,16 +238,15 @@ def showMainPage():
 @app.route('/venuefinder/JSON')
 def arenasJSON():
     arenas = session.query(Arenas).all()
-    return jsonify(serializevenues=[i.serialize for i in arenas])
+    return jsonify(arenas=[i.serialize for i in arenas])
 
 # Creates JSON Endpoint to view singleVenue
 
 
 @app.route('/venuefinder/<int:arenas_id>/JSON')
 def arenasSingleJSON(arenas_id):
-    print arenas_id
-    arenas = session.query(Arenas).filter_by(id=arenas_id).all()
-    return jsonify(serializevenues=[i.serialize for i in arenas])
+    arenas = session.query(Arenas).filter_by(id=arenas_id).one()
+    return jsonify(arena=arenas.serialize)
 
 
 # Shows all the sports venues
@@ -252,14 +264,12 @@ def show_venues():
 
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
-    if 'username' not in login_session:
-        return redirect(url_for('show_login'))
 
     if request.method == 'POST':
         newVenue = Arenas(name=request.form['name'],
                           description=request.form['description'],
-                          url=request.form['url'])
-        print newVenue.name, newVenue.description, newVenue.url
+                          url=request.form['url'],
+                          user_id=login_session['user_id'])
         session.add(newVenue)
         session.commit()
         flash("New Venue %s has been created" % (newVenue.name))
@@ -270,16 +280,20 @@ def NewVenue():
 
 
 # Edit Existing Venue Information
+# @login_required
 @app.route('/venuefinder/<int:arenas_id>/edit/', methods=['GET', 'POST'])
 def updateVenue(arenas_id):
     if 'username' not in login_session:
         return redirect(url_for('show_login'))
+
     updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
 
-    if updatevenues.id != login_session['user_id']:
+    if not updatevenues:
+        return redirect('/venuefinder')
+
+    if updatevenues.user_id != login_session['user_id']:
         flash('You need to login for editing')
         return redirect(url_for('show_login'))
-
 
     if request.method == 'POST':
         print "Inside request.method == post if statement"
@@ -296,17 +310,15 @@ def updateVenue(arenas_id):
     else:
         return render_template('editVenue.html', venue=updatevenues)
 
-
-
 # Delete Venue/Arenas Information
+
+
 @app.route('/venuefinder/<int:arenas_id>/delete/', methods=['GET', 'POST'])
 def deleteVenue(arenas_id):
     venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
-    # if 'username' not in login_session:
-    #     return redirect(url_for('show_login'))
-    print venueToBeDeleted.id
-    print login_session['user_id']
-    if venueToBeDeleted.id != login_session['user_id']:
+    if 'username' not in login_session:
+        return redirect(url_for('show_login'))
+    if login_session['user_id'] != venueToBeDeleted.user_id:
         flash('You need to login for deleting')
         return redirect(url_for('show_login'))
 
