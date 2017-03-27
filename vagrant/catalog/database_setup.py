@@ -23,27 +23,6 @@ class User(Base):
     email = Column(String(250), nullable = False)
     picture = Column(String(250))
 
-# class Sports(Base):
-#     """
-#     Table for type of sports and venues
-#     """
-#     __tablename__ = 'sports'
-#
-#     id = Column(Integer, primary_key = True)
-#     name = Column(String(200), nullable = False)
-#     venues = relationship('Arenas', cascade="save-update, merge, delete")
-#
-#     @property
-#     def serialize(self):
-#         """
-#         Returns sports venue database information in a serialize format
-#         """
-#         return {
-#             'id': self.id,
-#             'name': self.name,
-#             'venues': [i.serialize for i in self.venues]
-#         }
-
 class Arenas(Base):
     """
     Defines the sports arenas table
@@ -55,10 +34,7 @@ class Arenas(Base):
     image = Column(String(250))
     url = Column(String(250))
 
-    # sports_id = Column(Integer, ForeignKey('sports.id'))
-    # sport = relationship('Sports')
-
-    users_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User')
 
 

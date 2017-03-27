@@ -1,8 +1,13 @@
 #
 # This is the main part of the program to run Favorite Venue Application.
 #
-import random, string
-from flask import Flask, render_template, request, redirect, jsonify, url_for, flash
+import random
+import string
+from flask import Flask, url_for, flash
+from flask import render_template
+from flask import request
+from flask import redirect
+from flask import jsonify
 from flask import make_response
 from flask import session as login_session
 from sqlalchemy import create_engine, asc
@@ -11,12 +16,14 @@ from database_setup import Base, User, Arenas
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from functools import wraps
-
-import json, requests, httplib2
+import json
+import requests
+import httplib2
 
 app = Flask(__name__)
 
-#Client Secrets file
+# Client Secrets file
+
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
 APPLICATION_NAME = 'Sports Venue Catalog'
@@ -27,8 +34,20 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+# def login_required(f):
+#     @wraps(f)
+#     def decorated_function(*args, **kwargs):
+#         if 'username' in login_session:
+#             print 'Decorator ',login_session['user_id']
+#             return f(*args, **kwargs)
+#         else:
+#             print 'else'
+#             flash("You are not allowed to access there")
+#             return redirect(url_for('show_venues'))
+#     return decorated_function
 
-#Login page - cross site forgery
+
+# Login page - cross site forgery
 @app.route('/login')
 def show_login():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -37,7 +56,9 @@ def show_login():
     print state
     return render_template('login.html', state=state)
 
-#Google Login
+# Google Login
+
+
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # Validate state token
@@ -139,6 +160,8 @@ def gconnect():
     return output
 
 # User Helper Functions
+
+
 def createUser(login_session):
     newUser = User(name=login_session['username'], email=login_session[
                    'email'], picture=login_session['picture'])
@@ -182,6 +205,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['user_id']
 
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
@@ -194,101 +218,120 @@ def gdisconnect():
         return response
 
 
-#General Disconnect method
+# General Disconnect method
 @app.route('/logout')
 def show_logout():
     if login_session['provider'] == 'google':
         gdisconnect()
         return redirect(url_for('show_venues'))
 
-#Shows the main page of the Venue Application
+# Shows the main page of the Venue Application
+
+
 @app.route('/')
 def showMainPage():
     return redirect(url_for('show_venues'))
 
-#Creates JSON Endpoint to view all venues
+# Creates JSON Endpoint to view all venues
+
+
 @app.route('/venuefinder/JSON')
 def arenasJSON():
     arenas = session.query(Arenas).all()
-    return jsonify(serializevenues = [i.serialize for i in arenas])
+    return jsonify(arenas=[i.serialize for i in arenas])
 
-#Creates JSON Endpoint to view singleVenue
+# Creates JSON Endpoint to view singleVenue
+
+
 @app.route('/venuefinder/<int:arenas_id>/JSON')
 def arenasSingleJSON(arenas_id):
-    print arenas_id
-    arenas = session.query(Arenas).filter_by(id = arenas_id).all()
-    return jsonify(serializevenues = [i.serialize for i in arenas])
+    arenas = session.query(Arenas).filter_by(id=arenas_id).one()
+    return jsonify(arena=arenas.serialize)
 
 
-#Shows all the sports venues
-@app.route('/venuefinder/', methods = ['GET', 'POST'])
+# Shows all the sports venues
+@app.route('/venuefinder/', methods=['GET', 'POST'])
 def show_venues():
     """Shows all the favorite venues in database
     """
     venues = session.query(Arenas).all()
     print "GET Request"
     print venues
-    return render_template('venue.html',venues=venues)
+    return render_template('venue.html', venues=venues)
 
-#Add New Venue to the Arenas Database
+# Add New Venue to the Arenas Database
+
+
 @app.route('/venuefinder/new', methods=['GET', 'POST'])
 def NewVenue():
-    """Creates a ne
-    """
-    if 'username' not in login_session:
-        return redirect(url_for('show_login'))
+
     if request.method == 'POST':
-        newVenue = Arenas(name=request.form['name'], description=request.form['description'], url=request.form['url'])
-        print newVenue.name, newVenue.description, newVenue.url
+        newVenue = Arenas(name=request.form['name'],
+                          description=request.form['description'],
+                          url=request.form['url'],
+                          user_id=login_session['user_id'])
         session.add(newVenue)
         session.commit()
-        flash("New Venue %s has been created" %(newVenue.name))
+        flash("New Venue %s has been created" % (newVenue.name))
         print newVenue.name, newVenue.description, newVenue.url, newVenue.id
         return redirect(url_for('show_venues'))
     else:
         return render_template('newVenue.html')
 
+
 # Edit Existing Venue Information
-@app.route('/venuefinder/<int:arenas_id>/edit/', methods= ['GET', 'POST'])
+# @login_required
+@app.route('/venuefinder/<int:arenas_id>/edit/', methods=['GET', 'POST'])
 def updateVenue(arenas_id):
     if 'username' not in login_session:
         return redirect(url_for('show_login'))
-    updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
-    if updatevenues:
-        if request.method == 'POST':
-            print "Inside request.method == post if statement"
-            if request.form['name']:
-                updatevenues.name = request.form['name']
-            if request.form['description']:
-                updatevenues.description = request.form['description']
-            if request.form['url']:
-                updatevenues.url = request.form['url']
-            session.add(updatevenues)
-            session.commit()
-            flash("Arenas has been updated")
-            return redirect(url_for('show_venues'))
-        else:
-            return render_template('editVenue.html', venue = updatevenues)
-    else:
-        print "No venue"
 
-#Delete Venue/Arenas Information
-@app.route('/venuefinder/<int:arenas_id>/delete/', methods = ['GET', 'POST'])
+    updatevenues = session.query(Arenas).filter_by(id=arenas_id).first()
+
+    if not updatevenues:
+        return redirect('/venuefinder')
+
+    if updatevenues.user_id != login_session['user_id']:
+        flash('You need to login for editing')
+        return redirect(url_for('show_login'))
+
+    if request.method == 'POST':
+        print "Inside request.method == post if statement"
+        if request.form['name']:
+            updatevenues.name = request.form['name']
+        if request.form['description']:
+            updatevenues.description = request.form['description']
+        if request.form['url']:
+            updatevenues.url = request.form['url']
+        session.add(updatevenues)
+        session.commit()
+        flash("Arenas has been updated")
+        return redirect(url_for('show_venues'))
+    else:
+        return render_template('editVenue.html', venue=updatevenues)
+
+# Delete Venue/Arenas Information
+
+
+@app.route('/venuefinder/<int:arenas_id>/delete/', methods=['GET', 'POST'])
 def deleteVenue(arenas_id):
+    venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
     if 'username' not in login_session:
         return redirect(url_for('show_login'))
-    venueToBeDeleted = session.query(Arenas).filter_by(id=arenas_id).first()
-    print venueToBeDeleted.id, venueToBeDeleted.name
+    if login_session['user_id'] != venueToBeDeleted.user_id:
+        flash('You need to login for deleting')
+        return redirect(url_for('show_login'))
+
     if request.method == 'POST':
         print "Inside request.method == POST"
         session.delete(venueToBeDeleted)
         session.commit()
         flash("Arenas has be deleted")
-        return redirect(url_for('show_venues', venue = venueToBeDeleted))
+        return redirect(url_for('show_venues', venue=venueToBeDeleted))
     else:
-        return render_template('deletevenue.html', venue = venueToBeDeleted)
+        return render_template('deletevenue.html', venue=venueToBeDeleted)
 
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host= '0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5000)
